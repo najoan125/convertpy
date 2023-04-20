@@ -1,4 +1,4 @@
-package com.main;
+package com;
 
 import com.File.FilePath;
 import com.python.FromPython;
