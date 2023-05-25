@@ -26,6 +26,28 @@ public class PyVariable {
         return false;
     }
 
+    public String variableToString(String line){
+        switch (getVariableType(line)){
+            case VAR_BOOL:
+                return getVariableString("Boolean", line);
+            case VAR_LIST:
+                return getVariableString("List",line);
+            case VAR_STR:
+                return getVariableString("String", line);
+            case VAR_INT:
+                return getVariableString("Int", line);
+        }
+        return null;
+    }
+
+    private String getVariableString(String type, String line){
+        if (!isVariableUsed(line)) {
+            registerVariableUsed(line);
+            return type + " 타입의 변수 " + getVariableName(line) + "을(를) " + getVariableValue(line) + "으(로) 초기화하여 선언";
+        }
+        return type+" 타입의 변수 " + getVariableName(line) + "을(를) " + getVariableValue(line) + "으(로)가 변경";
+    }
+
     public int getVariableType(String line){
         if (isVariable(line)){
             if (isVariableBoolean(line)){

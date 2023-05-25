@@ -4,16 +4,38 @@ import com.File.FilePath;
 import com.python.PyVariable;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        PyVariable pyVariable = new PyVariable();
-        FilePath filePath = new FilePath();
-        String[] lineArray = filePath.readLinesToStringArray("/home/najoan/문서/test.txt");
+    static PyVariable pyVariable = new PyVariable();
+    static FilePath filePath = new FilePath();
+    public static void main(String[] args) {
+        System.out.print("변환할 파일(.py)의 경로를 입력하세요: ");
+        Scanner sc = new Scanner(System.in);
+        String userInput = sc.nextLine();
 
-        System.out.println(Arrays.toString(lineArray)); //파일을 배열로 변환한 것을 출력
-        System.out.println(pyVariable.getVariableType(lineArray[0]));
-        System.out.println(pyVariable.getVariableValue(lineArray[0]));
+        String[] lineArray = new String[0];
+        try {
+            lineArray = filePath.readLinesToStringArray(userInput);
+        } catch (IOException e) {
+            System.out.println(userInput+"을(를) 읽는 데 실패했습니다.");
+            System.exit(-1);
+        }
+        System.out.println();
+
+        convertToText(lineArray);
+    }
+
+    private static void convertToText(String[] lineArray){
+        int i = 0;
+        for (String s : lineArray){
+            i++;
+            if (pyVariable.isVariable(s)){
+                System.out.println(pyVariable.variableToString(s));
+            }
+            else{
+                System.out.println("Line "+i+"> "+s+": 구문 해석 실패");
+            }
+        }
     }
 }
