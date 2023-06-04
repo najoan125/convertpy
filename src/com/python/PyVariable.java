@@ -1,6 +1,6 @@
 package com.python;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -12,7 +12,7 @@ public class PyVariable {
     public static final int VAR_UNKNOWN = -1;
     public static final int VAR_ERROR = -2;
 
-    private static ArrayList<String> variableNames = new ArrayList<>();
+    private static final HashMap<String,String> variables = new HashMap<>();
 
     public boolean isVariable(String line){
         Queue<String> queue = new LinkedList<>();
@@ -26,6 +26,10 @@ public class PyVariable {
         return false;
     }
 
+    /**
+     * After run this method, You must run registerVariableUsed().
+     * But don't run registerVariableUsed() before run this method.
+     */
     public String variableToString(String line){
         switch (getVariableType(line)){
             case VAR_BOOL:
@@ -42,10 +46,9 @@ public class PyVariable {
 
     private String getVariableString(String type, String line){
         if (!isVariableUsed(line)) {
-            registerVariableUsed(line);
             return type + " 타입의 변수 " + getVariableName(line) + "을(를) " + getVariableValue(line) + "으(로) 초기화하여 선언";
         }
-        return type+" 타입의 변수 " + getVariableName(line) + "을(를) " + getVariableValue(line) + "으(로)가 변경";
+        return type+" 타입의 변수 " + getVariableName(line) + "을(를) " + getVariablePreviousValue(line) + "에서 " + getVariableValue(line) + "으(로) 변경";
     }
 
     public int getVariableType(String line){
@@ -68,11 +71,18 @@ public class PyVariable {
     }
 
     public boolean isVariableUsed(String line){
-        return variableNames.contains(getVariableName(line));
+        return variables.containsKey(getVariableName(line));
     }
 
+    public String getVariablePreviousValue(String line){
+        return variables.get(getVariableName(line));
+    }
+
+    /**
+     * Duplicate registration updates the saved variable
+     */
     public void registerVariableUsed(String line){
-        variableNames.add(getVariableName(line));
+        variables.put(getVariableName(line),getVariableValue(line));
     }
 
     public String getVariableValue(String line){

@@ -12,34 +12,51 @@ public class Main {
     public static void main(String[] args) {
         System.out.print("변환할 파일(.py)의 경로를 입력하세요: ");
         Scanner sc = new Scanner(System.in);
-        String userInput = sc.nextLine();
+        String filePath = sc.nextLine();
 
-        String[] lineArray = new String[0];
-        try {
-            lineArray = filePath.readLinesToStringArray(userInput);
-        } catch (IOException e) {
-            System.out.println(userInput+"을(를) 읽는 데 실패했습니다.");
+        String[] lineArray = readFile(filePath);
+        if (lineArray == null){
+            System.out.println(filePath+"을(를) 읽는 데 실패했습니다.");
             System.exit(-1);
         }
-        System.out.println();
 
-        convertToText(lineArray);
+        System.out.println();
+        printToText(lineArray);
     }
 
-    private static void convertToText(String[] lineArray){
+    private static String[] readFile(String path){
+        String[] lineArray;
+        try {
+            lineArray = filePath.readLinesToStringArray(path);
+        } catch (IOException e) {
+            return null;
+        }
+        return lineArray;
+    }
+
+    private static void printToText(String[] lineArray){
         int i = 0;
         for (String s : lineArray){
             i++;
             if (pyVariable.isVariable(s)){
-                if (pyVariable.getVariableType(s) == PyVariable.VAR_ERROR) {
-                    System.out.println("Line " + i + "> " + s + ": 구문 해석 실패");
-                } else {
-                    System.out.println(pyVariable.variableToString(s));
-                }
+                System.out.println(variable(i, s));
             }
             else{
-                System.out.println("Line "+i+"> "+s+": 구문 해석 실패");
+                System.out.println(getErrorMessage(i,s));
             }
         }
+    }
+
+    private static String getErrorMessage(int count, String line){
+        return "Line " + count + "> " + line + ": 구문 해석 실패";
+    }
+
+    private static String variable(int count, String line){
+        if (pyVariable.getVariableType(line) == PyVariable.VAR_ERROR) {
+            return getErrorMessage(count,line);
+        }
+        String toString = pyVariable.variableToString(line);
+        pyVariable.registerVariableUsed(line);
+        return toString;
     }
 }
