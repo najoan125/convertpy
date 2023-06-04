@@ -31,7 +31,11 @@ public class Main {
         for (String s : lineArray){
             i++;
             if (pyVariable.isVariable(s)){
-                System.out.println(pyVariable.variableToString(s));
+                if (pyVariable.getVariableType(s) == PyVariable.VAR_ERROR) {
+                    System.out.println("Line " + i + "> " + s + ": 구문 해석 실패");
+                } else {
+                    System.out.println(pyVariable.variableToString(s));
+                }
             }
             else{
                 System.out.println("Line "+i+"> "+s+": 구문 해석 실패");
