@@ -48,7 +48,7 @@ public class PyVariable {
         if (!isVariableUsed(line)) {
             return type + " 타입의 변수 " + getVariableName(line) + "을(를) " + getVariableValue(line) + "으(로) 초기화하여 선언";
         }
-        return type+" 타입의 변수 " + getVariableName(line) + "을(를) " + getVariablePreviousValue(line) + "에서 " + getVariableValue(line) + "으(로) 변경";
+        return type+" 타입의 변수 " + getVariableName(line) + "을(를) " + getVariableRegisteredValue(line) + "에서 " + getVariableValue(line) + "으(로) 변경";
     }
 
     public int getVariableType(String line){
@@ -74,7 +74,7 @@ public class PyVariable {
         return variables.containsKey(getVariableName(line));
     }
 
-    public String getVariablePreviousValue(String line){
+    public String getVariableRegisteredValue(String line){
         return variables.get(getVariableName(line));
     }
 
