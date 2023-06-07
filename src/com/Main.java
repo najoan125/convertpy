@@ -1,6 +1,7 @@
 package com;
 
 import com.File.FilePath;
+import com.python.PyConditional;
 import com.python.PyVariable;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.Scanner;
 
 public class Main {
     static PyVariable pyVariable = new PyVariable();
+    static PyConditional pyConditional = new PyConditional();
     static FilePath filePath = new FilePath();
     public static void main(String[] args) {
         System.out.print("변환할 파일(.py)의 경로를 입력하세요: ");
@@ -38,12 +40,30 @@ public class Main {
         int i = 0;
         for (String s : lineArray){
             i++;
+            boolean isLineIncludesTab = s.contains("\t");
+            int originalLength = s.length();
+            int tabs;
+            if (isLineIncludesTab){
+                s = s.replace("\t","");
+                tabs = originalLength - s.length();
+                printTabString(tabs);
+            }
+
             if (pyVariable.isVariable(s)){
                 System.out.println(variable(i, s));
             }
-            else{
-                System.out.println(getErrorMessage(i,s));
+            else if (pyConditional.isConditional(s)){
+                System.out.println(pyConditional.conditionalToString(s));
             }
+            else{
+                System.out.println(getErrorMessage(i, s));
+            }
+        }
+    }
+
+    private static void printTabString(int count){
+        for (int i=0;i<count;i++){
+            System.out.print("\t");
         }
     }
 

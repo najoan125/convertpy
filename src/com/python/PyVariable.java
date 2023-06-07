@@ -102,7 +102,7 @@ public class PyVariable {
     public boolean isVariableInteger(String line){
         if (isVariable(line)) {
             String[] value = line.split("=");
-            return value[1].matches("^[0-9]*$");
+            return value[1].matches("^[0-9]*$") || value[1].matches("^-[0-9]*$");
         }
         return false;
     }

@@ -13,8 +13,8 @@ public class FilePath {
 
         String readLine;
         while ((readLine = reader.readLine()) != null){
-            if (readLine.startsWith("\t")){
-                result.add("\t"+readLine.replaceAll("\\s",""));
+            if (readLine.contains("\t")){
+                result.add(getTabString(countTab(readLine))+readLine.replaceAll("\\s",""));
             }
             else {
                 result.add(readLine.replaceAll("\\s", ""));
@@ -22,6 +22,16 @@ public class FilePath {
         }
 
         return result.toArray(new String[0]);
+    }
+    private int countTab(String line){
+        return line.length() - line.replace("\t","").length();
+    }
+    private String getTabString(int count){
+        StringBuilder builder = new StringBuilder();
+        for (int i=0;i<count;i++){
+            builder.append("\t");
+        }
+        return builder.toString();
     }
     public BufferedReader getBufferedReader(String path) throws FileNotFoundException {
         return new BufferedReader(
