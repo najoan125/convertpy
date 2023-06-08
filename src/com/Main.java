@@ -40,13 +40,10 @@ public class Main {
         int i = 0;
         for (String s : lineArray){
             i++;
-            boolean isLineIncludesTab = s.contains("\t");
-            int originalLength = s.length();
-            int tabs;
-            if (isLineIncludesTab){
+            if (s.contains("\t")){
+                int originalLength = s.length();
                 s = s.replace("\t","");
-                tabs = originalLength - s.length();
-                printTabString(tabs);
+                printTabString(originalLength - s.length());
             }
 
             if (pyVariable.isVariable(s)){
