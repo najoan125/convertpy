@@ -2,6 +2,8 @@ package com;
 
 import com.File.FilePath;
 import com.python.PyConditional;
+import com.python.PyFunction;
+import com.python.PyReturn;
 import com.python.PyVariable;
 
 import java.io.IOException;
@@ -10,6 +12,8 @@ import java.util.Scanner;
 public class Main {
     static PyVariable pyVariable = new PyVariable();
     static PyConditional pyConditional = new PyConditional();
+    static PyFunction pyFunction = new PyFunction();
+    static PyReturn pyReturn = new PyReturn();
     static FilePath filePath = new FilePath();
     public static void main(String[] args) {
         System.out.print("변환할 파일(.py)의 경로를 입력하세요: ");
@@ -45,12 +49,22 @@ public class Main {
                 s = s.replace("\t","");
                 printTabString(originalLength - s.length());
             }
+            if (s.trim().equals("")) continue;
 
             if (pyVariable.isVariable(s)){
                 System.out.println(variable(i, s));
             }
             else if (pyConditional.isConditional(s)){
                 System.out.println(pyConditional.conditionalToString(s));
+            }
+            else if (pyFunction.isFunction(s)){
+                System.out.println(pyFunction.functionToString(s));
+            }
+            else if (pyReturn.isReturn(s)){
+                System.out.println(pyReturn.returnToString(s));
+            }
+            else if (pyFunction.isFunctionCall(s)){
+                System.out.println(pyFunction.functionCallToString(s));
             }
             else{
                 System.out.println(getErrorMessage(i, s));
